@@ -1,0 +1,107 @@
+jamesdanielmarrsritchey: Using C++, write a program that reads from stdin, until it reaches a byte number, and then returns that byte. Arguments are passed from the commandline by the user. Arguments all have prefixes identifying them. If the byte number is than the number of bytes in the input, the program should return bool false, and exit 1.
+
+GitHub Copilot: Here is a simple C++ program that reads from stdin until it reaches a specified byte number, then returns that byte. The byte number is passed as a command-line argument with a prefix. If the byte number is greater than the number of bytes in the input, the program returns `false` and exits with a status of `1`.
+
+```cpp
+#include <iostream>
+#include <string>
+#include <cstdlib>
+
+int main(int argc, char* argv[]) {
+    // Check if the correct number of arguments are passed
+    if (argc != 2) {
+        std::cerr << "Usage: ./program byte_number\n";
+        return 1;
+    }
+
+    // Extract the byte number from the argument
+    std::string arg = argv[1];
+    if (arg.substr(0, 5) != "byte=") {
+        std::cerr << "Invalid argument. Expected format: byte=number\n";
+        return 1;
+    }
+    int byteNumber = std::stoi(arg.substr(5));
+
+    // Read from stdin
+    char c;
+    int count = 0;
+    while (std::cin.get(c)) {
+        count++;
+        if (count == byteNumber) {
+            std::cout << c << '\n';
+            return 0;
+        }
+    }
+
+    // If the byte number is greater than the number of bytes in the input
+    if (count < byteNumber) {
+        std::cerr << "Byte number is greater than the number of bytes in the input.\n";
+        return 1;
+    }
+
+    return 0;
+}
+```
+
+To compile and run this program, you can use the following commands in the terminal:
+
+```bash
+g++ -o program program.cpp
+./program byte=5 < input.txt
+```
+
+In this example, `program.cpp` is the name of the file containing the C++ code, `program` is the name of the output file, `byte=5` is the command-line argument specifying the byte number, and `input.txt` is the file from which stdin reads.
+
+jamesdanielmarrsritchey: The byte argument should be formatted as "--byte value".
+
+GitHub Copilot: Sure, here is the updated C++ program that expects the byte number argument in the format `--byte value`.
+
+```cpp
+#include <iostream>
+#include <string>
+#include <cstdlib>
+
+int main(int argc, char* argv[]) {
+    // Check if the correct number of arguments are passed
+    if (argc != 3) {
+        std::cerr << "Usage: ./program --byte byte_number\n";
+        return 1;
+    }
+
+    // Extract the byte number from the argument
+    std::string arg = argv[1];
+    if (arg != "--byte") {
+        std::cerr << "Invalid argument. Expected format: --byte number\n";
+        return 1;
+    }
+    int byteNumber = std::stoi(argv[2]);
+
+    // Read from stdin
+    char c;
+    int count = 0;
+    while (std::cin.get(c)) {
+        count++;
+        if (count == byteNumber) {
+            std::cout << c << '\n';
+            return 0;
+        }
+    }
+
+    // If the byte number is greater than the number of bytes in the input
+    if (count < byteNumber) {
+        std::cerr << "Byte number is greater than the number of bytes in the input.\n";
+        return 1;
+    }
+
+    return 0;
+}
+```
+
+To compile and run this program, you can use the following commands in the terminal:
+
+```bash
+g++ -o program program.cpp
+./program --byte 5 < input.txt
+```
+
+In this example, `program.cpp` is the name of the file containing the C++ code, `program` is the name of the output file, `--byte 5` is the command-line argument specifying the byte number, and `input.txt` is the file from which stdin reads.
